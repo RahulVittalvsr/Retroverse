@@ -1,0 +1,518 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base ─────────────────────────────────────────────────── */
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: 'Press Start 2P', monospace;
+  background: #070714;
+  color: #eaffff;
+  overflow-x: hidden;
+}
+
+/* ─── CSS Variables ─────────────────────────────────────────── */
+:root {
+  --bg:      #070714;
+  --panel:   rgba(14, 8, 32, 0.82);
+  --border:  rgba(0, 255, 255, 0.28);
+  --text:    #eaffff;
+  --muted:   rgba(234, 255, 255, 0.72);
+  --neon:    #00ffff;
+  --neon2:   #ff4dff;
+  --neon3:   #7cff00;
+  --amber:   #ffb800;
+  --shadow:  0 0 22px rgba(0, 255, 255, 0.38);
+  --shadow2: 0 0 22px rgba(255, 77, 255, 0.32);
+}
+
+/* ─── Animated Background ───────────────────────────────────── */
+.rv-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 900px 520px at 15% 10%, rgba(255, 77, 255, 0.18), transparent 60%),
+    radial-gradient(ellipse 700px 420px at 80% 15%, rgba(0, 255, 255, 0.15), transparent 55%),
+    radial-gradient(ellipse 500px 300px at 50% 90%, rgba(124, 255, 0, 0.08), transparent 60%),
+    linear-gradient(180deg, rgba(7, 7, 20, 1) 0%, rgba(10, 5, 28, 1) 100%);
+}
+
+/* CRT scanlines overlay */
+.rv-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.18) 3px,
+    rgba(0, 0, 0, 0.18) 4px
+  );
+  pointer-events: none;
+}
+
+/* ─── Panels ────────────────────────────────────────────────── */
+.rv-panel {
+  background: var(--panel);
+  border: 1px solid rgba(0, 255, 255, 0.22);
+  border-radius: 8px;
+  position: relative;
+}
+
+/* pixel-corner accent on panels */
+.rv-panel::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px;
+  width: 8px; height: 8px;
+  border-top: 2px solid var(--neon);
+  border-left: 2px solid var(--neon);
+  border-radius: 2px 0 0 0;
+  opacity: 0.7;
+}
+.rv-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; right: -1px;
+  width: 8px; height: 8px;
+  border-bottom: 2px solid var(--neon2);
+  border-right: 2px solid var(--neon2);
+  border-radius: 0 0 2px 0;
+  opacity: 0.5;
+}
+
+.rv-panel-callout {
+  border-color: rgba(255, 77, 255, 0.38);
+  box-shadow: 0 0 24px rgba(255, 77, 255, 0.14);
+}
+
+.rv-panel-callout::before { border-color: var(--neon2); }
+.rv-panel-callout::after  { border-color: var(--neon); }
+
+/* ─── Neon outline utility ──────────────────────────────────── */
+.rv-neon-outline {
+  border: 1px solid rgba(0, 255, 255, 0.32);
+  box-shadow: 0 0 14px rgba(0, 255, 255, 0.14), inset 0 0 8px rgba(0, 255, 255, 0.04);
+}
+
+/* ─── Animated neon title ───────────────────────────────────── */
+@keyframes neonPulse {
+  0%, 100% { text-shadow: 0 0 8px #00ffff, 0 0 20px #00ffff, 0 0 40px #00ffff; }
+  50%       { text-shadow: 0 0 4px #00ffff, 0 0 10px #00ffff, 0 0 20px #00ffff; }
+}
+
+@keyframes magentaPulse {
+  0%, 100% { text-shadow: 0 0 8px #ff4dff, 0 0 20px #ff4dff, 0 0 40px #ff4dff; }
+  50%       { text-shadow: 0 0 4px #ff4dff, 0 0 10px #ff4dff, 0 0 20px #ff4dff; }
+}
+
+@keyframes scanDown {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes floatUp {
+  0%   { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.rv-title {
+  letter-spacing: 0.1em;
+  animation: neonPulse 2.8s ease-in-out infinite;
+}
+
+.rv-title-magenta {
+  animation: magentaPulse 2.4s ease-in-out infinite;
+}
+
+.rv-blink {
+  animation: blink 1s step-end infinite;
+}
+
+.rv-float-in {
+  animation: floatUp 0.35s ease-out both;
+}
+
+/* ─── Pixel border (thick retro border) ────────────────────── */
+.rv-pixel-border {
+  border: 2px solid var(--neon);
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px rgba(0, 255, 255, 0.3);
+}
+
+.rv-pixel-border-magenta {
+  border: 2px solid var(--neon2);
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px rgba(255, 77, 255, 0.3);
+}
+
+/* ─── Arcade Buttons ────────────────────────────────────────── */
+.rv-btn-arcade {
+  display: inline-block;
+  padding: 10px 18px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: var(--bg);
+  background: var(--neon);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow:
+    0 4px 0 rgba(0, 180, 180, 0.9),
+    0 0 20px rgba(0, 255, 255, 0.4);
+  transition: transform 0.08s, box-shadow 0.08s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rv-btn-arcade:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(0, 180, 180, 0.9), 0 0 30px rgba(0, 255, 255, 0.55);
+}
+
+.rv-btn-arcade:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0, 180, 180, 0.9), 0 0 12px rgba(0, 255, 255, 0.3);
+}
+
+.rv-btn-arcade-magenta {
+  color: var(--bg);
+  background: var(--neon2);
+  box-shadow: 0 4px 0 rgba(180, 0, 180, 0.9), 0 0 20px rgba(255, 77, 255, 0.4);
+}
+
+.rv-btn-arcade-magenta:hover {
+  box-shadow: 0 6px 0 rgba(180, 0, 180, 0.9), 0 0 30px rgba(255, 77, 255, 0.55);
+}
+
+.rv-btn-arcade-magenta:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(180, 0, 180, 0.9);
+}
+
+.rv-btn-arcade-lime {
+  color: var(--bg);
+  background: var(--neon3);
+  box-shadow: 0 4px 0 rgba(80, 180, 0, 0.9), 0 0 20px rgba(124, 255, 0, 0.4);
+}
+
+.rv-btn-arcade-lime:hover {
+  box-shadow: 0 6px 0 rgba(80, 180, 0, 0.9), 0 0 30px rgba(124, 255, 0, 0.55);
+}
+
+/* ─── Ghost / outline button ────────────────────────────────── */
+.rv-btn-ghost {
+  display: inline-block;
+  padding: 8px 14px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: var(--neon);
+  background: transparent;
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.12);
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.rv-btn-ghost:hover {
+  background: rgba(0, 255, 255, 0.08);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.28);
+}
+
+.rv-btn-ghost:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ─── Inputs ────────────────────────────────────────────────── */
+.rv-input-field {
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 255, 255, 0.28);
+  background: rgba(4, 4, 16, 0.8);
+  color: var(--text);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.rv-input-field:focus {
+  border-color: rgba(0, 255, 255, 0.6);
+  box-shadow: 0 0 14px rgba(0, 255, 255, 0.2);
+}
+
+.rv-input-field::placeholder { color: rgba(234, 255, 255, 0.3); }
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); }
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 255, 0.35);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 255, 255, 0.6); }
+
+/* ─── Select ────────────────────────────────────────────────── */
+select.rv-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2300ffff'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+
+/* ─── Alignment helpers ─────────────────────────────────────── */
+.rv-align-left   { text-align: left; }
+.rv-align-center { text-align: center; }
+.rv-align-right  { text-align: right; }
+
+/* ─── Preview / Export shared styles ───────────────────────── */
+.rv-page {
+  position: relative;
+  width: 100%;
+}
+
+.rv-hero {
+  margin: 14px 0 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(0, 255, 255, 0.28);
+  background: linear-gradient(160deg, rgba(10, 6, 28, 0.9), rgba(14, 8, 32, 0.7));
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.rv-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 40px,
+    rgba(0, 255, 255, 0.03) 40px,
+    rgba(0, 255, 255, 0.03) 41px
+  );
+}
+
+.rv-logo { display: flex; align-items: center; gap: 12px; }
+
+.rv-logo-mark {
+  color: var(--neon2);
+  text-shadow: 0 0 16px rgba(255, 77, 255, 0.6);
+  font-size: 20px;
+}
+
+.rv-logo-text {
+  letter-spacing: 0.1em;
+  font-size: 16px;
+  color: var(--neon);
+  text-shadow: 0 0 12px rgba(0, 255, 255, 0.5);
+}
+
+.rv-hero-sub {
+  margin: 10px 0 0;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+.rv-h1 {
+  font-size: 20px;
+  margin: 0 0 10px;
+  color: var(--neon);
+  text-shadow: var(--shadow);
+  line-height: 1.4;
+}
+
+.rv-h2 {
+  font-size: 13px;
+  margin: 0 0 10px;
+  color: var(--neon3);
+  line-height: 1.4;
+}
+
+.rv-lead {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.rv-p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.8;
+}
+
+.rv-callout {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.8;
+}
+
+.rv-panel-media { padding: 12px; }
+
+.rv-img {
+  width: 100%;
+  max-height: 340px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 255, 255, 0.28);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.18);
+}
+
+.rv-img-placeholder {
+  padding: 28px 14px;
+  border-radius: 6px;
+  border: 2px dashed rgba(0, 255, 255, 0.3);
+  color: rgba(234, 255, 255, 0.6);
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+/* Exported site button */
+.rv-btn {
+  display: inline-block;
+  padding: 11px 18px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 255, 255, 0.45);
+  color: var(--text);
+  text-decoration: none;
+  background: linear-gradient(180deg, rgba(0, 255, 255, 0.16), rgba(0, 255, 255, 0.05));
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.14);
+  transition: transform 0.1s, box-shadow 0.1s;
+  font-size: 10px;
+  font-family: 'Press Start 2P', monospace;
+}
+
+.rv-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(0, 255, 255, 0.3);
+}
+
+.rv-btn-submit {
+  margin-top: 12px;
+  border-color: rgba(255, 77, 255, 0.45);
+  background: linear-gradient(180deg, rgba(255, 77, 255, 0.18), rgba(255, 77, 255, 0.05));
+  box-shadow: 0 0 20px rgba(255, 77, 255, 0.16);
+}
+
+.rv-panel-form .rv-label { display: block; margin: 12px 0; }
+
+.rv-label span {
+  display: block;
+  margin: 0 0 6px;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+.rv-input, .rv-textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 255, 255, 0.25);
+  background: rgba(4, 4, 16, 0.8);
+  color: var(--text);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+}
+
+.rv-textarea { resize: vertical; min-height: 96px; }
+
+.rv-form-status {
+  margin: 12px 0 0;
+  color: rgba(124, 255, 0, 0.9);
+  font-size: 10px;
+}
+
+/* ─── Pixel divider ─────────────────────────────────────────── */
+.rv-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
+  margin: 12px 0;
+}
+
+/* ─── Badge / chip ──────────────────────────────────────────── */
+.rv-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 9px;
+  background: rgba(0, 255, 255, 0.12);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  color: var(--neon);
+}
+
+.rv-badge-magenta {
+  background: rgba(255, 77, 255, 0.12);
+  border-color: rgba(255, 77, 255, 0.3);
+  color: var(--neon2);
+}
+
+.rv-badge-lime {
+  background: rgba(124, 255, 0, 0.1);
+  border-color: rgba(124, 255, 0, 0.3);
+  color: var(--neon3);
+}
+
+/* ─── Tooltip ───────────────────────────────────────────────── */
+.rv-tooltip {
+  position: relative;
+}
+.rv-tooltip:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(14, 8, 32, 0.95);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  color: var(--neon);
+  font-size: 9px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* ─── Toast ─────────────────────────────────────────────────── */
+.rv-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(14, 8, 32, 0.96);
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  box-shadow: 0 0 24px rgba(0, 255, 255, 0.25);
+  padding: 12px 20px;
+  border-radius: 6px;
+  z-index: 9999;
+  animation: floatUp 0.25s ease-out both;
+  max-width: 90vw;
+}
+
+/* ─── Responsive ────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .rv-panel { padding: 12px; }
+  .rv-h1 { font-size: 15px; }
+  .rv-h2 { font-size: 11px; }
+}
